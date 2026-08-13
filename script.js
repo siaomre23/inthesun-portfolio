@@ -1,13 +1,13 @@
 async function getContent(){
-  // 1. published content.json (what every visitor sees on the live site)
-  try{
-    const res = await fetch('content.json', {cache:'no-store'});
-    if(res.ok) return await res.json();
-  }catch(e){}
-  // 2. this browser's unpublished local edits (admin preview only)
+  // 1. this browser's unpublished admin edits (so you see your own changes right away)
   try{
     const saved = localStorage.getItem('site_content');
     if(saved) return JSON.parse(saved);
+  }catch(e){}
+  // 2. published content.json (what everyone else sees on the live site)
+  try{
+    const res = await fetch('content.json', {cache:'no-store'});
+    if(res.ok) return await res.json();
   }catch(e){}
   // 3. hard-coded fallback
   return DEFAULT_CONTENT;
