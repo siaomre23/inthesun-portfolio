@@ -106,6 +106,20 @@ section{ padding:8rem 5%; position:relative; }
   font-family:'Fraunces',serif; font-size:8rem; font-style:italic; color:var(--line);
   line-height:.7; user-select:none;
 }
+.about-photo{
+  width:100%; aspect-ratio:4/5; overflow:hidden; border:1px solid var(--line);
+  position:relative;
+}
+.about-photo img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:grayscale(35%) contrast(1.05);
+  transition:filter .5s var(--ease);
+}
+.about-photo:hover img{ filter:grayscale(0%) contrast(1.05); }
+.about-photo::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(160deg, rgba(193,18,31,.12), transparent 55%);
+}
 #about-text{ font-size:1.15rem; line-height:1.85; color:#cfcfcf; }
 
 /* Journey / orbit timeline */

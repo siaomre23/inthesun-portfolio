@@ -1,11 +1,18 @@
 const PASS_KEY = 'site_admin_pass';
 const CONTENT_KEY = 'site_content';
 
-function getContent(){
+async function getContent(){
+  // 1. unsaved local edits in this browser take priority (so a refresh doesn't lose work)
   try{
     const saved = localStorage.getItem(CONTENT_KEY);
     if(saved) return JSON.parse(saved);
   }catch(e){}
+  // 2. currently published content.json
+  try{
+    const res = await fetch('content.json', {cache:'no-store'});
+    if(res.ok) return await res.json();
+  }catch(e){}
+  // 3. hard-coded fallback
   return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
 }
 function saveContent(c){ localStorage.setItem(CONTENT_KEY, JSON.stringify(c)); }
@@ -44,10 +51,10 @@ function initGate(){
   }
 }
 
-function openAdmin(){
+async function openAdmin(){
   document.getElementById('gate').style.display = 'none';
   document.getElementById('admin-wrap').classList.add('active');
-  loadFormFromContent(getContent());
+  loadFormFromContent(await getContent());
 }
 
 /* ---------- form population ---------- */
@@ -60,6 +67,7 @@ function loadFormFromContent(c){
   document.getElementById('f-heroSub').value = state.heroSub;
   document.getElementById('f-about').value = state.about;
   document.getElementById('f-accent').value = state.accent || '#C1121F';
+  renderPhotoPreview();
 
   renderJourney();
   renderInterests();
@@ -152,6 +160,37 @@ function renderContacts(){
   }));
 }
 
+function renderPhotoPreview(){
+  const wrap = document.getElementById('photo-preview');
+  wrap.innerHTML = state.photo
+    ? `<img src="${state.photo}" alt="preview">`
+    : `<span class="empty">No photo set — About section will show the decorative mark instead.</span>`;
+}
+
+/* Resize + compress an uploaded image to a reasonable size before storing it
+   as a base64 data URL (keeps content.json small and localStorage happy). */
+function resizeImage(file, maxDim=900, quality=0.82){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ()=>{
+      img.onerror = reject;
+      img.onload = ()=>{
+        let {width, height} = img;
+        if(width > height && width > maxDim){ height = Math.round(height*maxDim/width); width = maxDim; }
+        else if(height > maxDim){ width = Math.round(width*maxDim/height); height = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function escapeHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -169,6 +208,27 @@ function initFormActions(){
   });
   document.getElementById('add-contact').addEventListener('click', ()=>{
     state.contact.push({label:'Label', url:'https://'}); renderContacts();
+  });
+
+  document.getElementById('f-photo').addEventListener('change', async e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){ showStatus('Please choose an image file.'); return; }
+    showStatus('Processing image…');
+    try{
+      state.photo = await resizeImage(file);
+      renderPhotoPreview();
+      showStatus('Photo ready. Click "Save changes" to apply it.');
+    }catch(err){
+      showStatus('Could not read that image — try a different file.');
+    }
+    e.target.value = '';
+  });
+
+  document.getElementById('remove-photo').addEventListener('click', ()=>{
+    state.photo = '';
+    renderPhotoPreview();
+    showStatus('Photo removed. Click "Save changes" to apply it.');
   });
 
   document.getElementById('admin-form').addEventListener('submit', e=>{

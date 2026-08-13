@@ -3,6 +3,7 @@
 const DEFAULT_CONTENT = {
   name: "YOUR NAME",
   tagline: "Student • Scientist • Dreamer",
+  photo: "",
   heroSub: "I build things, chase orbits, and write down what I find along the way.",
   about: "This is where your story goes. A short, honest paragraph about who you are, what pulls your attention, and where you're headed. Write it like you're telling a friend, not filling out a form.",
   journey: [

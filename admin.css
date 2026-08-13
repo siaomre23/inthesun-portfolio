@@ -46,3 +46,5 @@ textarea{ resize:vertical; min-height:80px; }
 .actions{ display:flex; gap:1rem; flex-wrap:wrap; margin-top:2.5rem; }
 .status{ font-family:'JetBrains Mono',monospace; font-size:.8rem; color:var(--accent-hover); margin-top:1rem; min-height:1.2em; }
 .file-input{ display:none; }
+#photo-preview img{ width:140px; height:175px; object-fit:cover; border:1px solid var(--line); display:block; }
+#photo-preview .empty{ font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--text-dim); }

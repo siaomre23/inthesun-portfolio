@@ -1,8 +1,15 @@
-function getContent(){
+async function getContent(){
+  // 1. published content.json (what every visitor sees on the live site)
+  try{
+    const res = await fetch('content.json', {cache:'no-store'});
+    if(res.ok) return await res.json();
+  }catch(e){}
+  // 2. this browser's unpublished local edits (admin preview only)
   try{
     const saved = localStorage.getItem('site_content');
     if(saved) return JSON.parse(saved);
   }catch(e){}
+  // 3. hard-coded fallback
   return DEFAULT_CONTENT;
 }
 
@@ -15,14 +22,23 @@ function applyAccent(hex){
   document.documentElement.style.setProperty('--accent-hover', hoverHex);
 }
 
-function render(){
-  const c = getContent();
+async function render(){
+  const c = await getContent();
   document.title = c.name + ' — ' + c.tagline;
   document.getElementById('nav-name').textContent = c.name;
   document.getElementById('hero-name').textContent = c.name;
   document.getElementById('hero-sub').textContent = c.heroSub;
   document.getElementById('hero-tagline').textContent = c.tagline;
   document.getElementById('about-text').textContent = c.about;
+
+  const visual = document.getElementById('about-visual');
+  if(c.photo){
+    visual.className = 'about-photo';
+    visual.innerHTML = `<img src="${c.photo}" alt="${c.name}">`;
+  }else{
+    visual.className = 'about-mark';
+    visual.textContent = '"';
+  }
 
   // interests
   const ig = document.getElementById('interest-grid');
@@ -78,13 +94,12 @@ function hexToSliderVal(hex){
 }
 
 function initAccentSlider(){
+  // Visitor-side live preview only (dark red <-> bright red).
+  // Not persisted: the published accent color always comes from content.json,
+  // set once by you in the admin panel.
   const range = document.getElementById('accent-range');
   range.addEventListener('input', e=>{
-    const hex = sliderValToHex(e.target.value);
-    applyAccent(hex);
-    const c = getContent();
-    c.accent = hex;
-    localStorage.setItem('site_content', JSON.stringify(c));
+    applyAccent(sliderValToHex(e.target.value));
   });
 }
 
