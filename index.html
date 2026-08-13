@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-name" id="nav-name">YOUR NAME</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#journey">Life</a></li>
+    <li><a href="#interests">Interests</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <canvas class="hero-canvas" id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <span class="eyebrow" id="hero-tagline">Student • Scientist • Dreamer</span>
+    <h1 class="hero-title">
+      <span class="line1">Hello, I'm <em>Someone.</em></span>
+      <span class="line2"><em id="hero-name">YOUR NAME</em></span>
+    </h1>
+    <p class="hero-sub" id="hero-sub">I build things, chase orbits, and write down what I find along the way.</p>
+    <a href="#about" class="hero-cta">Explore my story</a>
+  </div>
+</header>
+
+<section id="about">
+  <div class="section-head" data-reveal>
+    <span class="eyebrow">01 — About</span>
+    <h2>About Me</h2>
+  </div>
+  <div class="about-grid">
+    <div id="about-visual" class="about-mark" aria-hidden="true">"</div>
+    <p id="about-text">A short introduction about you.</p>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="section-head" data-reveal>
+    <span class="eyebrow">02 — Timeline</span>
+    <h2>My Journey</h2>
+  </div>
+  <div class="journey-wrap">
+    <svg id="orbit-svg"></svg>
+  </div>
+</section>
+
+<section id="interests">
+  <div class="section-head" data-reveal>
+    <span class="eyebrow">03 — Curiosity</span>
+    <h2>Interests</h2>
+  </div>
+  <div class="interest-grid" id="interest-grid"></div>
+</section>
+
+<section id="skills">
+  <div class="section-head" data-reveal>
+    <span class="eyebrow">04 — Craft</span>
+    <h2>Skills</h2>
+  </div>
+  <div class="skills-list" id="skills-list"></div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="section-head" style="margin-left:auto;margin-right:auto;" data-reveal>
+    <span class="eyebrow">05 — Reach out</span>
+    <h2>Find Me On</h2>
+  </div>
+  <div class="contact-links" id="contact-links"></div>
+</section>
+
+<footer>
+  <span class="fine">© <span id="year-now"></span> — built in black &amp; red</span>
+  <span class="fine"><a href="admin.html">Site admin</a></span>
+</footer>
+
+<div class="accent-slider">
+  <span>DARK</span>
+  <input type="range" id="accent-range" min="0" max="100" value="50">
+  <span>RED</span>
+</div>
+
+<script src="content.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
