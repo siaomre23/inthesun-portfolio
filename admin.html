@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <h1 id="gate-title">Site Admin</h1>
+  <p class="hint" id="gate-hint">Set a password to protect this admin page. It's stored only in this browser.</p>
+  <input type="password" id="pass-input" placeholder="Password">
+  <button id="gate-btn">Continue</button>
+  <p class="hint" style="opacity:.6">Note: this protects casual access on your own device. It is not real server-side security — anyone with your browser's storage, or the raw page source, can bypass it. That's fine for a personal static site; use a real login system once you add a backend.</p>
+</div>
+
+<div class="admin-wrap" id="admin-wrap">
+  <div class="admin-header">
+    <h1>Edit your site</h1>
+    <a href="index.html">← Back to site</a>
+  </div>
+
+  <form id="admin-form">
+    <fieldset>
+      <legend>Identity</legend>
+      <label>Name</label>
+      <input type="text" id="f-name">
+      <label>Tagline (shown above your name)</label>
+      <input type="text" id="f-tagline">
+      <label>Hero subtitle</label>
+      <textarea id="f-heroSub"></textarea>
+      <label>Accent color</label>
+      <input type="color" id="f-accent">
+    </fieldset>
+
+    <fieldset>
+      <legend>About</legend>
+      <label>About paragraph</label>
+      <textarea id="f-about" style="min-height:120px"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Life Journey (timeline)</legend>
+      <div id="journey-list"></div>
+      <button type="button" class="btn add-btn" id="add-journey">+ Add moment</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Interests</legend>
+      <div id="interests-list"></div>
+      <button type="button" class="btn add-btn" id="add-interest">+ Add interest</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Skills</legend>
+      <div id="skills-list-admin"></div>
+      <button type="button" class="btn add-btn" id="add-skill">+ Add skill</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Contact links</legend>
+      <div id="contact-list"></div>
+      <button type="button" class="btn add-btn" id="add-contact">+ Add link</button>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="btn">Save changes</button>
+      <button type="button" class="btn" id="export-btn">Download content.json</button>
+      <button type="button" class="btn" id="import-btn">Import content.json</button>
+      <button type="button" class="btn" id="reset-btn" style="border-color:#555;">Reset to defaults</button>
+      <input type="file" id="import-file" class="file-input" accept="application/json">
+    </div>
+    <p class="status" id="status"></p>
+  </form>
+</div>
+
+<script src="content.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
